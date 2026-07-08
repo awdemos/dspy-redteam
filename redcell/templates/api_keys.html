@@ -1,0 +1,17 @@
+{% extends "_layout.html" %}
+
+{% block title %}Redcells — API Keys{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-text font-display">API Keys</h1>
+      <p class="mt-1 text-sm text-text-muted">Create and revoke keys for programmatic access.</p>
+    </div>
+    <a href="/dashboard" class="text-sm text-text-muted hover:text-text transition-colors">Back to dashboard</a>
+  </div>
+
+  {% include "api_keys_partial.html" %}
+</div>
+{% endblock %}

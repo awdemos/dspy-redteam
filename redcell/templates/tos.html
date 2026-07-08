@@ -1,0 +1,71 @@
+{% extends "_layout.html" %}
+
+{% block title %}Redcells — Terms of Service{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+  <h1 class="text-3xl font-bold text-text font-display">Terms of Service</h1>
+  <p class="mt-2 text-sm text-text-dim">Effective: July 2026</p>
+
+  <div class="mt-8 space-y-6 text-sm leading-relaxed text-text-muted">
+    <section class="rounded-(--radius-card) border border-surface-border bg-surface p-6">
+      <h2 class="text-lg font-semibold text-text font-display">1. Service Description</h2>
+      <p class="mt-2">
+        Redcells is an internal security research platform that allows authorized users to test AI models they own or control
+        for vulnerabilities. You may only test models for which you have explicit authorization.
+      </p>
+    </section>
+
+    <section class="rounded-(--radius-card) border border-surface-border bg-surface p-6">
+      <h2 class="text-lg font-semibold text-text font-display">2. Authorization &amp; Legal Compliance</h2>
+      <p class="mt-2">
+        You represent and warrant that you have full legal authority to test the models you submit.
+        You must not use Redcells to test models you do not own or lack written authorization to test.
+        Violation of computer fraud or anti-hacking laws is strictly prohibited.
+      </p>
+    </section>
+
+    <section class="rounded-(--radius-card) border border-surface-border bg-surface p-6">
+      <h2 class="text-lg font-semibold text-text font-display">3. Fair Use</h2>
+      <p class="mt-2">
+        Usage is limited to the plan you've selected. Automated scraping, abuse of the API,
+        or any activity that disrupts the platform is grounds for immediate termination.
+      </p>
+    </section>
+
+    <section class="rounded-(--radius-card) border border-surface-border bg-surface p-6">
+      <h2 class="text-lg font-semibold text-text font-display">4. Data Handling</h2>
+      <p class="mt-2">
+        Credentials you provide for model access are encrypted at rest using AES-256-GCM when a master key is configured.
+        We do not share your data with third parties except as required to process your jobs
+        (e.g., sending prompts to the LLM APIs you configure).
+      </p>
+    </section>
+
+    <section class="rounded-(--radius-card) border border-surface-border bg-surface p-6">
+      <h2 class="text-lg font-semibold text-text font-display">5. Payment</h2>
+      <p class="mt-2">
+        Payments are processed via Stripe when billing is enabled. Subscription fees are billed monthly.
+        All fees are non-refundable except as required by applicable law.
+      </p>
+    </section>
+
+    <section class="rounded-(--radius-card) border border-surface-border bg-surface p-6">
+      <h2 class="text-lg font-semibold text-text font-display">6. Limitation of Liability</h2>
+      <p class="mt-2">
+        Redcells is provided "as is" without warranty. We are not liable for damages arising
+        from use of the platform, including but not limited to security incidents caused by
+        the output of tested models.
+      </p>
+    </section>
+
+    <section class="rounded-(--radius-card) border border-surface-border bg-surface p-6">
+      <h2 class="text-lg font-semibold text-text font-display">7. Termination</h2>
+      <p class="mt-2">
+        We may suspend or terminate your account for violation of these terms.
+        Upon termination, your encrypted credentials are permanently deleted.
+      </p>
+    </section>
+  </div>
+</div>
+{% endblock %}

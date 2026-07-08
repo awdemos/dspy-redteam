@@ -1,0 +1,53 @@
+app = "redcell-pocket-id"
+primary_region = "ord"
+
+[env]
+  PORT = "1411"
+  DB_CONNECTION_STRING = "/app/data/pocket-id.db"
+  APP_URL = "https://pocketid.redcells.net"
+  VERSION_CHECK_DISABLED = "true"
+  ANALYTICS_DISABLED = "true"
+  TRUST_PROXY = "true"
+  SMTP_HOST = "smtp.resend.com"
+  SMTP_PORT = "587"
+  SMTP_FROM = "support@redcells.net"
+  SMTP_USER = "resend"
+  SMTP_TLS = "starttls"
+
+[http_service]
+  internal_port = 1411
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'requests'
+    hard_limit = 1000
+    soft_limit = 500
+
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'GET'
+    path = '/health'
+
+[mounts]
+  source = "pocket_id_data"
+  destination = "/app/data"
+
+[[checks]]
+  name = "alive"
+  type = "http"
+  port = 1411
+  path = "/health"
+  interval = "15s"
+  timeout = "2s"
+  grace_period = "10s"
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '512mb'
+  cpu_kind = 'shared'

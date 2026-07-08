@@ -1,0 +1,114 @@
+{% extends "_layout.html" %}
+
+{% block title %}Redcells — Billing{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+  <h1 class="text-2xl font-bold text-text font-display">Billing</h1>
+
+  <!-- Current Plan -->
+  <div class="mt-8 rounded-(--radius-card) border border-surface-border bg-surface p-6 shadow-card">
+    <h2 class="text-lg font-semibold text-text font-display">Current Plan</h2>
+
+    {% if let Some(sub) = subscription %}
+    <div class="mt-4 space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-text-muted">Status</span>
+        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
+          {% if sub.status == "active" || sub.status == "trialing" %}
+          bg-success/10 text-success border border-success/20
+          {% else %}
+          bg-danger/10 text-danger border border-danger/20
+          {% endif %}
+        ">{{ sub.status }}</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-text-muted">Plan</span>
+        <span class="text-sm font-medium text-text">Pro ($49/month)</span>
+      </div>
+      {% if let Some(end) = sub.current_period_end %}
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-text-muted">Current period ends</span>
+        <span class="text-sm text-text">{{ end.format("%B %d, %Y") }}</span>
+      </div>
+      {% endif %}
+      {% if sub.cancel_at_period_end != 0 %}
+      <div class="rounded-lg bg-warning/10 border border-warning/30 px-4 py-3">
+        <p class="text-sm text-warning">
+          Your subscription will cancel at the end of the current billing period.
+        </p>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="mt-6 flex gap-3">
+      {% if sub.cancel_at_period_end == 0 && (sub.status == "active" || sub.status == "trialing") %}
+      <form method="POST" action="/billing/portal">
+        <button
+          type="submit"
+          class="rounded-lg bg-surface-raised px-4 py-2 text-sm font-semibold text-text hover:bg-surface-border transition-colors ring-1 ring-inset ring-surface-border"
+        >
+          Manage in Stripe
+        </button>
+      </form>
+      {% endif %}
+    </div>
+
+    {% else %}
+    <div class="mt-4">
+      <p class="text-sm text-text-muted">You don't have an active subscription.</p>
+      <div class="mt-4 rounded-(--radius-card) border border-surface-border bg-surface-raised p-6">
+        <h3 class="text-lg font-semibold text-text font-display">Pro Plan</h3>
+        <p class="mt-1 text-sm text-text-muted">$49/month &middot; 100 jobs/month &middot; 10 layers/job</p>
+        <ul class="mt-3 space-y-2 text-sm text-text-muted">
+          <li class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+            Up to 100 automated red teaming jobs per month
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+            Up to 10 attack layers per job
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+            Encrypted credential storage
+          </li>
+          <li class="flex items-center gap-2">
+            <svg class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+            Priority support
+          </li>
+        </ul>
+        <a
+          href="/billing/checkout"
+          class="mt-4 inline-flex items-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover transition-colors"
+        >
+          Subscribe
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Usage -->
+  <div class="mt-8 rounded-(--radius-card) border border-surface-border bg-surface p-6 shadow-card">
+    <h2 class="text-lg font-semibold text-text font-display">This Month's Usage</h2>
+    <div class="mt-4">
+      <div class="flex items-center justify-between text-sm">
+        <span class="text-text-muted">Jobs used</span>
+        <span class="font-medium text-text">{{ jobs_used }} / {{ jobs_limit }}</span>
+      </div>
+      <div class="mt-2 h-2 w-full rounded-full bg-surface-raised">
+        <div
+          class="h-2 rounded-full {% if jobs_used >= jobs_limit %}bg-danger{% else %}bg-accent{% endif %}"
+          style="width: {{ (jobs_used as f64 / jobs_limit as f64 * 100.0) as i32 }}%"
+        ></div>
+      </div>
+      {% if jobs_used >= jobs_limit %}
+      <p class="mt-2 text-xs text-warning">
+        You've reached your monthly limit. Jobs will not be accepted until the next billing period.
+      </p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

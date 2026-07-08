@@ -1,0 +1,60 @@
+# Fly.io configuration for Redcell
+# Replace app name with: flyctl apps create --name your-app-name
+app = 'redcell'
+primary_region = 'ord'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'requests'
+    hard_limit = 1000
+    soft_limit = 500
+
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'GET'
+    path = '/health'
+
+[env]
+  REDTEAM__ENV = 'production'
+  REDTEAM__MODE = 'server'
+  REDTEAM__SERVER__HOST = '0.0.0.0'
+  REDTEAM__SERVER__PORT = '3000'
+  # Secrets (set via flyctl secrets set):
+  # REDTEAM__OIDC__ISSUER_URL
+  # REDTEAM__OIDC__CLIENT_ID
+  # REDTEAM__OIDC__CLIENT_SECRET
+  # REDTEAM__OIDC__REDIRECT_URI
+  # REDTEAM__LLM__API_KEY
+  # REDTEAM__LLM__BASE_URL
+  # REDTEAM__LLM__ATTACK_MODEL
+  # REDTEAM__LLM__JUDGE_MODEL
+  # REDTEAM__LLM__TARGET_BASE_URL
+  # REDTEAM__LLM__TARGET_API_KEY
+  # REDTEAM__DATABASE__URL
+  # REDTEAM__REDIS__URL
+  # REDTEAM__STRIPE__SECRET_KEY
+  # REDTEAM__STRIPE__PUBLISHABLE_KEY
+  # REDTEAM__STRIPE__WEBHOOK_SECRET
+  # REDTEAM__STRIPE__PRICE_ID
+  # REDTEAM__CREDENTIALS__MASTER_KEY
+
+[mounts]
+  source = "redcell_data"
+  destination = "/app/data"
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '512mb'
+  cpu_kind = 'shared'

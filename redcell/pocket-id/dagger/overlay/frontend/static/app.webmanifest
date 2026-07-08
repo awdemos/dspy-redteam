@@ -1,0 +1,22 @@
+{
+	"name": "Redcell",
+	"short_name": "Redcell",
+	"orientation": "any",
+	"display": "minimal-ui",
+	"dir": "auto",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "api/application-images/logo",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "api/application-images/logo",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	]
+}
