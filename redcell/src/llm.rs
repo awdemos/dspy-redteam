@@ -62,7 +62,7 @@ impl LlmClient {
         let request = CreateChatCompletionRequestArgs::default()
             .model(model)
             .max_tokens(512u32)
-            .temperature(0.0)
+            .temperature(0.0_f32)
             .messages([
                 ChatCompletionRequestSystemMessage {
                     content: system.into(),
