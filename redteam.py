@@ -1,12 +1,14 @@
-import dspy
-import instructor
 import json
 import os
+
+import dspy
+import instructor
 from dotenv import load_dotenv
 from dspy.evaluate import Evaluate
 from dspy.teleprompt import MIPROv2
 from openai import OpenAI
 from tqdm import tqdm
+
 from utils import get_response, judge_prompt, verdict_judge
 
 load_dotenv()
@@ -134,12 +136,12 @@ def main():
             intent=ex.harmful_intent, attack_prompt=ex.harmful_intent, eval_round=True
         )
     base_score /= len(trainset)
-    print(f"--- Raw Harmful Intent Strings ---")
+    print("--- Raw Harmful Intent Strings ---")
     print(f"Baseline Score: {base_score}")
 
     # Evaluating architecture with no compilation
     attacker_prog = AttackProgram(layers=5)
-    print(f"\n--- Evaluating Initial Architecture ---")
+    print("\n--- Evaluating Initial Architecture ---")
     eval_program(attacker_prog, trainset)
 
     optimizer = MIPROv2(metric=metric, auto="light")
@@ -153,7 +155,7 @@ def main():
     )
 
     # Evaluating architecture DSPy post-compilation
-    print(f"\n--- Evaluating Optimized Architecture ---")
+    print("\n--- Evaluating Optimized Architecture ---")
     eval_program(best_prog, trainset)
 
 

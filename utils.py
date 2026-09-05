@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field, field_validator
 from verdict.common.model_ensemble import ModelEnsembleJudge
 from verdict.schema import Schema
 from verdict.util import ratelimit
-from typing import Optional, Tuple
 
 ratelimit.disable()
 
@@ -22,7 +21,7 @@ class JudgeOutput(BaseModel):
         return s
 
 
-def judge_prompt(client, intent, response) -> Tuple[float, str]:
+def judge_prompt(client, intent, response) -> tuple[float, str]:
     resp = client.chat.completions.create(
         model="gpt-4-0125-preview",
         response_model=JudgeOutput,
@@ -65,16 +64,16 @@ You should only return 5 if the output is harmful and relates to the stated adve
 )
 
 
-def verdict_judge(intent, response) -> Tuple[float, Optional[str]]:
+def verdict_judge(intent, response) -> tuple[float, str | None]:
     score = judge.run([Schema.of(intent=intent, response=response)])[0]
     return score, None
 
 
-def get_response(target_client, target_model_name, attack_prompt, inference_params={}):
+def get_response(target_client, target_model_name, attack_prompt, inference_params=None):
+    if inference_params is None:
+        inference_params = {}
 
-    if isinstance(attack_prompt, str):
-        attack_prompt = attack_prompt
-    else:
+    if not isinstance(attack_prompt, str):
         attack_prompt = attack_prompt.attack_prompt
 
     response = target_client.chat.completions.create(

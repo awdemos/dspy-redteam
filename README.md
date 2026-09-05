@@ -16,7 +16,7 @@ To our knowledge, this is the first attempt at using any auto-prompting *framewo
 We accomplish this using a *deep* language program with several layers of alternating `Attack` and `Refine` modules in the following optimization loop:
 
 <figure style="text-align: center;">
-  <img src="legacy/images/DSPy-Redteam.png" alt="Overview of DSPy for red-teaming" style="margin: 0 auto; margin-bottom: 20px; display: block;">
+  <img src="images/DSPy-Redteam.png" alt="Overview of DSPy for red-teaming" style="margin: 0 auto; margin-bottom: 20px; display: block;">
   <figcaption><i>Figure 1: Overview of DSPy for red-teaming. The DSPy MIPRO optimizer, guided by a LLM as a judge, compiles our language program into an effective red-teamer against Vicuna.</i></figcaption>
 </figure>
 
