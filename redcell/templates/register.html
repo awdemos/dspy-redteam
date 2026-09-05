@@ -1,0 +1,28 @@
+{% extends "_layout.html" %}
+
+{% block title %}Redcells — Create Account{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-md px-4 py-16 sm:px-6">
+  <div class="rounded-(--radius-card) border border-surface-border bg-surface p-8 shadow-card">
+    <h1 class="text-2xl font-bold text-center text-text font-display">Create account</h1>
+    <p class="mt-2 text-center text-sm text-text-muted">
+      Already registered?
+      <a href="/login" class="font-medium text-accent hover:text-accent-hover transition-colors">Log in</a>
+    </p>
+
+    <div class="mt-6 space-y-4">
+      <a
+        href="/auth/login"
+        class="block w-full rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-white shadow-glow hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent/50 transition-colors"
+      >
+        Continue with Pocket ID
+      </a>
+      <p class="text-center text-xs text-text-muted">
+        By signing in you agree to the
+        <a href="/tos" target="_blank" class="font-medium text-accent hover:text-accent-hover transition-colors">Terms of Service</a>.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

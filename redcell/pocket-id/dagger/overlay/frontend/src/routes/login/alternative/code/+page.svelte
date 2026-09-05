@@ -1,0 +1,90 @@
+<script lang="ts">
+	import { afterNavigate, goto } from '$app/navigation';
+	import SignInWrapper from '$lib/components/login-wrapper.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import { m } from '$lib/paraglide/messages';
+	import UserService from '$lib/services/user-service';
+	import userStore from '$lib/stores/user-store.js';
+	import { getAxiosErrorMessage } from '$lib/utils/error-util';
+	import { preventDefault } from '$lib/utils/event-util';
+	import { onMount } from 'svelte';
+	import LoginLogoErrorSuccessIndicator from '../../components/login-logo-error-success-indicator.svelte';
+
+	let { data } = $props();
+	let code = $state(data.code ?? '');
+	let isLoading = $state(false);
+	let error: string | undefined = $state();
+	let backHref = $state('/login/alternative');
+
+	const userService = new UserService();
+
+	// If the previous page is a Pocket ID page, go back there instead of the generic alternative login page
+	afterNavigate((e) => {
+		if (e.from?.url.pathname) {
+			backHref = e.from.url.pathname + e.from.url.search;
+		}
+	});
+
+	async function authenticate() {
+		isLoading = true;
+		try {
+			const user = await userService.exchangeOneTimeAccessToken(code);
+			await userStore.setUser(user);
+
+			const target = data.redirect || '/authorize';
+			try {
+				await goto(target);
+				// goto may silently no-op for external/invalid URLs, so force a fallback
+				if (!window.location.href.endsWith(target) && !target.startsWith('/')) {
+					window.location.href = target;
+				}
+			} catch (e) {
+				console.error('redirect failed; falling back to window.location.href', e);
+				window.location.href = target;
+			}
+		} catch (e) {
+			error = getAxiosErrorMessage(e);
+		}
+
+		isLoading = false;
+	}
+
+	onMount(() => {
+		if (code) {
+			authenticate();
+		}
+	});
+</script>
+
+<svelte:head>
+	<title>{m.login_code()}</title>
+</svelte:head>
+
+<SignInWrapper>
+	<div class="flex justify-center">
+		<LoginLogoErrorSuccessIndicator error={!!error} />
+	</div>
+	<h1 class="font-gloock mt-5 text-4xl font-bold">{m.login_code()}</h1>
+	{#if error}
+		<p class="text-muted-foreground mt-2">
+			{error}. {m.please_try_again()}
+		</p>
+	{:else}
+		<p class="text-muted-foreground mt-2">{m.enter_the_code_you_received_to_sign_in()}</p>
+	{/if}
+	<form onsubmit={preventDefault(authenticate)} class="w-full max-w-[450px]">
+		<Input
+			id="Code"
+			class="mt-7"
+			placeholder={m.code()}
+			aria-label={m.code()}
+			bind:value={code}
+			type="text"
+		/>
+		<div class="mt-8 flex justify-between gap-2">
+			<Button variant="secondary" class="flex-1" href={backHref}>{m.go_back()}</Button>
+			<Button class="flex-1" type="submit" {isLoading}>{m.submit()}</Button>
+		</div>
+	</form>
+</SignInWrapper>

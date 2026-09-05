@@ -1,0 +1,6 @@
+# Build artifacts
+pocket-id-branded.tar
+
+# Runtime secrets
+.env
+.env.local

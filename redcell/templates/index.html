@@ -1,0 +1,312 @@
+{% extends "_layout.html" %}
+
+{% block title %}Redcells — AI Red Teaming Platform{% endblock %}
+
+{% block content %}
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-bg">
+    <!-- Atmospheric background layers -->
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="mesh-bg animate-mesh absolute inset-0 opacity-[0.18]"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-bg via-transparent to-bg"></div>
+      <div class="aurora-blob animate-aurora absolute -left-[20%] -top-[30%] h-[70vw] max-h-[900px] w-[70vw] max-w-[900px] bg-accent/20"></div>
+      <div class="aurora-blob animate-aurora-slow absolute -right-[20%] top-[10%] h-[60vw] max-h-[760px] w-[60vw] max-w-[760px] bg-indigo-600/15"></div>
+      <div class="light-ray animate-ray absolute left-1/2 top-0 h-[120%] w-[120%] -translate-x-1/2 opacity-40"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
+      <div class="grid items-center gap-16 lg:grid-cols-2">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent-soft px-3 py-1 text-xs font-medium text-accent font-mono">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-40"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
+            </span>
+            Private AI red-teaming platform
+          </div>
+          <h1 class="mt-6 font-display text-5xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
+            Break your models <span class="text-gradient">before attackers do</span>
+          </h1>
+          <p class="mt-6 text-lg leading-8 text-text-muted">
+            Redcells runs automated adversarial probes against the AI systems you own or control. Find jailbreaks, prompt injections, and policy gaps — then fix them.
+          </p>
+          <div class="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            {% if logged_in %}
+              <a
+                href="/dashboard"
+                class="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-accent-glow"
+              >
+                Open Dashboard
+              </a>
+              <a
+                href="/docs"
+                class="inline-flex items-center justify-center rounded-full glass-card px-7 py-3.5 text-base font-semibold text-text transition-all duration-300 hover:-translate-y-0.5 hover:border-surface-border hover:bg-surface-raised"
+              >
+                Read the docs
+              </a>
+            {% else %}
+              <a
+                href="/register"
+                class="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-accent-glow"
+              >
+                Start free trial
+              </a>
+              <a
+                href="/login"
+                class="inline-flex items-center justify-center rounded-full glass-card px-7 py-3.5 text-base font-semibold text-text transition-all duration-300 hover:-translate-y-0.5 hover:border-surface-border hover:bg-surface-raised"
+              >
+                Log in
+              </a>
+            {% endif %}
+          </div>
+          <p class="mt-5 text-sm text-text-dim">No public model scanning. You bring the target. You keep the results.</p>
+        </div>
+
+        <!-- Bold hero visual: shield lattice / orbiting core -->
+        <div class="relative hidden items-center justify-center lg:flex">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="h-[420px] w-[420px] rounded-full border border-accent/10 bg-accent/[0.03] blur-sm"></div>
+            <div class="absolute h-[320px] w-[320px] rounded-full border border-white/5"></div>
+          </div>
+          <svg class="relative h-[420px] w-[420px] animate-float" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+            <defs>
+              <radialGradient id="core-grad" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35" />
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="shield-lattice" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#f87171" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="0.12" />
+              </linearGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+            <!-- Lattice ring -->
+            <circle cx="200" cy="200" r="150" stroke="url(#shield-lattice)" stroke-width="1" opacity="0.6" />
+            <circle cx="200" cy="200" r="118" stroke="url(#shield-lattice)" stroke-width="1" opacity="0.4" />
+            <circle cx="200" cy="200" r="86" stroke="url(#shield-lattice)" stroke-width="1" opacity="0.3" />
+            <!-- Radial lattice lines -->
+            <g stroke="url(#shield-lattice)" stroke-width="1" opacity="0.25">
+              <line x1="200" y1="50" x2="200" y2="350" />
+              <line x1="50" y1="200" x2="350" y2="200" />
+              <line x1="94" y1="94" x2="306" y2="306" />
+              <line x1="306" y1="94" x2="94" y2="306" />
+            </g>
+            <!-- Pulsing core -->
+            <circle cx="200" cy="200" r="48" fill="url(#core-grad)" class="animate-pulse-core" />
+            <circle cx="200" cy="200" r="28" fill="#ef4444" fill-opacity="0.85" filter="url(#glow)" />
+            <!-- Orbiting particles -->
+            <g class="animate-orbit" style="transform-origin: 200px 200px;">
+              <circle cx="200" cy="55" r="5" fill="#f87171" />
+              <circle cx="345" cy="200" r="3" fill="#f87171" opacity="0.7" />
+            </g>
+            <g class="animate-orbit-reverse" style="transform-origin: 200px 200px;">
+              <circle cx="200" cy="345" r="4" fill="#fca5a5" />
+              <circle cx="55" cy="200" r="2.5" fill="#fca5a5" opacity="0.7" />
+            </g>
+            <!-- Shield outline -->
+            <path
+              d="M200 70 L320 115 V210 C320 275 270 325 200 340 C130 325 80 275 80 210 V115 L200 70 Z"
+              stroke="#ef4444"
+              stroke-width="2"
+              stroke-opacity="0.5"
+              fill="none"
+              filter="url(#glow)"
+            />
+            <path
+              d="M200 100 L290 135 V205 C290 255 252 295 200 310 C148 295 110 255 110 205 V135 L200 100 Z"
+              stroke="url(#shield-lattice)"
+              stroke-width="1.5"
+              fill="none"
+              opacity="0.6"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust / security strip -->
+  <section class="relative border-y border-surface-border bg-bg/80 backdrop-blur-sm">
+    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-8 sm:grid-cols-3">
+        <div class="flex items-start gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent-soft text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-semibold text-text">You own the model</p>
+            <p class="mt-1 text-sm text-text-muted">Only targets you control can be tested.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent-soft text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-semibold text-text">You control the data</p>
+            <p class="mt-1 text-sm text-text-muted">API keys and results stay in your environment.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent-soft text-accent">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-display font-semibold text-text">You see every probe</p>
+            <p class="mt-1 text-sm text-text-muted">Full traceability for audits and remediation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature cards -->
+  <section class="relative py-24 sm:py-32">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-accent/5 blur-[120px]"></div>
+    </div>
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-16 max-w-2xl">
+        <h2 class="font-display text-3xl font-bold tracking-tight text-text sm:text-4xl">
+          Built for security teams that <span class="text-gradient-soft">think like attackers</span>
+        </h2>
+        <p class="mt-4 text-text-muted">Redcells automates the repetitive parts of adversarial testing so you can focus on the findings that matter.</p>
+      </div>
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="group glass-card rounded-(--radius-card) p-8 transition-all duration-500 hover:-translate-y-2 hover:border-accent/30 hover:bg-surface-raised hover:shadow-accent-glow">
+          <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-accent/20 bg-accent-soft text-accent transition-transform duration-500 group-hover:scale-110">
+            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-text font-display">Automated Attacks</h3>
+          <p class="mt-3 text-text-muted">
+            Run a growing library of adversarial probes against your target model, from jailbreak attempts to prompt injection and beyond.
+          </p>
+        </div>
+
+        <div class="group glass-card rounded-(--radius-card) p-8 transition-all duration-500 hover:-translate-y-2 hover:border-accent/30 hover:bg-surface-raised hover:shadow-accent-glow">
+          <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-accent/20 bg-accent-soft text-accent transition-transform duration-500 group-hover:scale-110">
+            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-text font-display">Model Ownership Required</h3>
+          <p class="mt-3 text-text-muted">
+            You can only test models you own or control. Bring your own API key for evaluation.
+          </p>
+        </div>
+
+        <div class="group glass-card rounded-(--radius-card) p-8 transition-all duration-500 hover:-translate-y-2 hover:border-accent/30 hover:bg-surface-raised hover:shadow-accent-glow">
+          <div class="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-accent/20 bg-accent-soft text-accent transition-transform duration-500 group-hover:scale-110">
+            <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20" />
+              <path d="M2 12h20" />
+              <path d="m4.93 4.93 14.14 14.14" />
+              <path d="m19.07 4.93-14.14 14.14" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-text font-display">Usage-Based Billing</h3>
+          <p class="mt-3 text-text-muted">
+            Pay for what you test. Transparent, metered billing with no long-term commitments.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="relative overflow-hidden border-y border-surface-border bg-surface/30 py-24 sm:py-32">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="mesh-bg animate-mesh absolute inset-0 opacity-[0.08]"></div>
+    </div>
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-16 text-center">
+        <h2 class="font-display text-3xl font-bold tracking-tight text-text sm:text-4xl">How Redcells works</h2>
+        <p class="mt-4 text-text-muted">From connection to actionable findings in minutes.</p>
+      </div>
+      <div class="grid gap-8 md:grid-cols-3">
+        <div class="relative glass-card rounded-(--radius-card) p-8 text-center">
+          <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-accent/30 bg-accent-soft font-display text-xl font-bold text-accent">1</div>
+          <h3 class="text-lg font-semibold text-text font-display">Connect target</h3>
+          <p class="mt-3 text-text-muted">Add the API endpoint for a model you own or control. Redcells never scans public endpoints.</p>
+          <div class="absolute -right-4 top-1/2 hidden -translate-y-1/2 text-text-dim md:block">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+        <div class="relative glass-card rounded-(--radius-card) p-8 text-center">
+          <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-accent/30 bg-accent-soft font-display text-xl font-bold text-accent">2</div>
+          <h3 class="text-lg font-semibold text-text font-display">Run probes</h3>
+          <p class="mt-3 text-text-muted">Launch curated adversarial probes that test for jailbreaks, prompt injection, data leakage, and more.</p>
+          <div class="absolute -right-4 top-1/2 hidden -translate-y-1/2 text-text-dim md:block">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+        <div class="relative glass-card rounded-(--radius-card) p-8 text-center">
+          <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-accent/30 bg-accent-soft font-display text-xl font-bold text-accent">3</div>
+          <h3 class="text-lg font-semibold text-text font-display">Review results</h3>
+          <p class="mt-3 text-text-muted">Inspect failures, replay prompts, export evidence, and ship fixes before anyone else finds the gap.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="relative overflow-hidden py-24 sm:py-32">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-tr from-accent/20 via-indigo-600/10 to-transparent blur-[100px]"></div>
+      <div class="light-ray animate-ray absolute left-1/2 top-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 opacity-25"></div>
+    </div>
+    <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+      <h2 class="font-display text-4xl font-bold tracking-tight text-text sm:text-5xl">
+        Start red-teaming with <span class="text-gradient">Redcells</span>
+      </h2>
+      <p class="mt-6 text-lg text-text-muted">
+        Get the clarity of an internal attack simulation without the overhead of running it yourself.
+      </p>
+      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        {% if logged_in %}
+          <a
+            href="/dashboard"
+            class="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-accent-glow"
+          >
+            Go to Dashboard
+          </a>
+        {% else %}
+          <a
+            href="/register"
+            class="inline-flex items-center justify-center rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-accent-glow"
+          >
+            Start free trial
+          </a>
+          <a
+            href="/docs"
+            class="inline-flex items-center justify-center rounded-full glass-card px-8 py-4 text-base font-semibold text-text transition-all duration-300 hover:-translate-y-0.5 hover:border-surface-border hover:bg-surface-raised"
+          >
+            Explore the docs
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

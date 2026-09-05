@@ -1,0 +1,29 @@
+{% extends "_layout.html" %}
+
+{% block title %}Redcells — Log In{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-md px-4 py-16 sm:px-6">
+  <div class="rounded-(--radius-card) border border-surface-border bg-surface p-8 shadow-card">
+    <h1 class="text-2xl font-bold text-center text-text font-display">Log in</h1>
+    <p class="mt-2 text-center text-sm text-text-muted">
+      Authenticate through the Redcells identity provider.
+    </p>
+
+    {% if let Some(error) = error %}
+    <div class="mt-6 rounded-lg bg-danger/10 border border-danger/30 px-4 py-3 text-sm text-danger">
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="mt-6 space-y-4">
+      <a
+        href="/auth/login"
+        class="block w-full rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-white shadow-glow hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent/50 transition-colors"
+      >
+        Continue with Pocket ID
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

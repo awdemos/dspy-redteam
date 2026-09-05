@@ -1,0 +1,118 @@
+{% extends "_layout.html" %}
+
+{% block title %}Redcells — Dashboard{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-text font-display">Dashboard</h1>
+      <p class="mt-1 text-sm text-text-muted">Welcome back, {{ user.email }}</p>
+    </div>
+    <a href="/api-keys" class="inline-flex items-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover transition-colors">
+      Manage API Keys
+    </a>
+  </div>
+
+  <!-- Stats cards -->
+  <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="rounded-(--radius-card) border border-surface-border bg-surface p-6 shadow-card">
+      <p class="text-sm font-medium text-text-muted">Monthly Jobs Used</p>
+      <p class="mt-2 text-3xl font-bold text-text">{{ jobs_used }}<span class="text-lg font-normal text-text-dim"> / {{ jobs_limit }}</span></p>
+      {% if jobs_used >= jobs_limit %}
+      <p class="mt-1 text-xs text-warning">Limit reached. Upgrade your plan.</p>
+      {% else %}
+      <p class="mt-1 text-xs text-text-dim">{{ jobs_limit - jobs_used }} remaining this month</p>
+      {% endif %}
+    </div>
+
+    <div class="rounded-(--radius-card) border border-surface-border bg-surface p-6 shadow-card">
+      <p class="text-sm font-medium text-text-muted">Active API Keys</p>
+      <p class="mt-2 text-3xl font-bold text-text">{{ api_key_count }}</p>
+    </div>
+
+    <div class="rounded-(--radius-card) border border-surface-border bg-surface p-6 shadow-card">
+      <p class="text-sm font-medium text-text-muted">Total Cost (MTD)</p>
+      <p class="mt-2 text-3xl font-bold text-text">${{ cost_str }}</p>
+    </div>
+  </div>
+
+  <!-- Subscription status -->
+  <div class="mt-8 rounded-(--radius-card) border border-surface-border bg-surface p-6 shadow-card">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-lg font-semibold text-text font-display">Subscription</h2>
+        {% if let Some(sub) = subscription %}
+        <p class="mt-1 text-sm text-text-muted">
+          Status:
+          <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
+            {% if sub.status == "active" || sub.status == "trialing" %}
+            bg-success/10 text-success border border-success/20
+            {% else %}
+            bg-danger/10 text-danger border border-danger/20
+            {% endif %}
+          ">{{ sub.status }}</span>
+          {% if let Some(end) = sub.current_period_end %}
+          &middot; Renews {{ end.format("%B %d, %Y") }}
+          {% endif %}
+        </p>
+        {% else %}
+        <p class="mt-1 text-sm text-text-muted">No active subscription</p>
+        {% endif %}
+      </div>
+      <a
+        href="/billing"
+        class="inline-flex items-center rounded-lg bg-surface-raised px-4 py-2 text-sm font-semibold text-text hover:bg-surface-border transition-colors ring-1 ring-inset ring-surface-border"
+      >
+        Manage
+      </a>
+    </div>
+  </div>
+
+  <!-- Recent jobs -->
+  <div class="mt-8">
+    <h2 class="text-lg font-semibold text-text font-display">Recent Jobs</h2>
+    {% if recent_jobs.is_empty() %}
+    <div class="mt-4 rounded-(--radius-card) border border-dashed border-surface-border bg-surface p-12 text-center">
+      <p class="text-sm text-text-muted">No jobs yet. Create one using the API.</p>
+      <p class="mt-1 text-xs text-text-dim">Use your API key to submit a red teaming job.</p>
+    </div>
+    {% else %}
+    <div class="mt-4 overflow-hidden rounded-(--radius-card) border border-surface-border bg-surface shadow-card">
+      <table class="min-w-full divide-y divide-surface-border">
+        <thead class="bg-surface-raised">
+          <tr>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">Intent</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">Target</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">Status</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-text-muted">Created</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-border bg-surface">
+          {% for job in recent_jobs %}
+          <tr class="hover:bg-surface-raised/50 transition-colors">
+            <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-text">{{ job.intent }}</td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm text-text-muted">{{ job.target_model }}</td>
+            <td class="whitespace-nowrap px-4 py-3">
+              <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
+                {% if job.status == "completed" %}
+                bg-success/10 text-success border border-success/20
+                {% else if job.status == "running" || job.status == "queued" %}
+                bg-info/10 text-info border border-info/20
+                {% else if job.status == "failed" %}
+                bg-danger/10 text-danger border border-danger/20
+                {% else %}
+                bg-surface-raised text-text-muted border border-surface-border
+                {% endif %}
+              ">{{ job.status }}</span>
+            </td>
+            <td class="whitespace-nowrap px-4 py-3 text-sm text-text-muted">{{ job.created_at.format("%Y-%m-%d %H:%M") }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

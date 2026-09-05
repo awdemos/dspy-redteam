@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-bg: #0a0b0d;
+  --color-canvas: #0a0b0d;
+  --color-surface: rgba(17, 19, 22, 0.72);
+  --color-surface-raised: rgba(23, 25, 29, 0.82);
+  --color-surface-border: rgba(255, 255, 255, 0.08);
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  --color-text-dim: #52525b;
+  --color-accent: #ef4444;
+  --color-accent-hover: #dc2626;
+  --color-accent-soft: rgba(239, 68, 68, 0.12);
+  --color-accent-border: rgba(239, 68, 68, 0.35);
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-warning-border: rgba(245, 158, 11, 0.3);
+  --color-info: #60a5fa;
+  --color-info-bg: rgba(96, 165, 250, 0.1);
+  --color-info-border: rgba(96, 165, 250, 0.3);
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-cta: #ffffff;
+  --color-cta-text: #0a0a0a;
+  --color-github: #171717;
+  --color-github-border: #27272a;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius-card: 1.25rem;
+  --radius-xl: 1.75rem;
+  --shadow-glow: 0 0 60px -15px rgba(239, 68, 68, 0.35);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.24), 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+  --animate-aurora: aurora 18s ease-in-out infinite alternate;
+  --animate-aurora-slow: aurora-slow 26s ease-in-out infinite alternate;
+  --animate-mesh: mesh-pan 28s linear infinite;
+  --animate-float: float 10s ease-in-out infinite;
+  --animate-orbit: orbit 24s ease-in-out infinite;
+  --animate-orbit-reverse: orbit-reverse 32s ease-in-out infinite;
+  --animate-pulse-core: pulse-core 6s ease-in-out infinite;
+  --animate-ray: ray-rotate 20s linear infinite;
+  --shadow-accent-glow: 0 0 50px -12px rgba(239, 68, 68, 0.55), 0 0 100px -30px rgba(239, 68, 68, 0.3);
+}
+
+@layer base {
+  html.dark body {
+    @apply bg-bg text-text antialiased;
+    font-feature-settings: "ss01" 1;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+  code, pre, kbd {
+    @apply font-mono;
+  }
+}
+
+@keyframes aurora {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(8%, -6%) scale(1.08); }
+  66% { transform: translate(-6%, 8%) scale(1.04); }
+  100% { transform: translate(4%, 4%) scale(1.1); }
+}
+
+@keyframes aurora-slow {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-10%, 6%) scale(1.12); }
+  100% { transform: translate(6%, -8%) scale(1.06); }
+}
+
+@keyframes mesh-pan {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(1deg); }
+}
+
+@keyframes orbit {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(6px, -8px); }
+  50% { transform: translate(0, -14px); }
+  75% { transform: translate(-6px, -8px); }
+}
+
+@keyframes orbit-reverse {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-8px, 6px); }
+  50% { transform: translate(0, 12px); }
+  75% { transform: translate(8px, 6px); }
+}
+
+@keyframes pulse-core {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes ray-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@utility mesh-bg {
+  background-image:
+    radial-gradient(circle at center, rgba(239, 68, 68, 0.22) 1px, transparent 1px),
+    linear-gradient(to right, rgba(239, 68, 68, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(239, 68, 68, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+@utility aurora-blob {
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+
+@utility light-ray {
+  background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(239, 68, 68, 0.14) 60deg, transparent 120deg);
+  mask-image: radial-gradient(circle at 50% 50%, black 10%, transparent 70%);
+}
+
+@utility glass-card {
+  background: rgba(17, 19, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+@utility text-gradient {
+  background-image: linear-gradient(135deg, #ffffff 0%, #f87171 60%, #ef4444 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-gradient-soft {
+  background-image: linear-gradient(135deg, #ffffff 0%, #fca5a5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora,
+  .animate-aurora-slow,
+  .animate-mesh,
+  .animate-float,
+  .animate-orbit,
+  .animate-orbit-reverse,
+  .animate-pulse-core,
+  .animate-ray {
+    animation: none;
+  }
+}
