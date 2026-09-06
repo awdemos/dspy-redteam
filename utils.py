@@ -70,11 +70,11 @@ def verdict_judge(intent, response) -> Tuple[float, Optional[str]]:
     return score, None
 
 
-def get_response(target_client, target_model_name, attack_prompt, inference_params={}):
+def get_response(target_client, target_model_name, attack_prompt, inference_params=None):
+    if inference_params is None:
+        inference_params = {}
 
-    if isinstance(attack_prompt, str):
-        attack_prompt = attack_prompt
-    else:
+    if hasattr(attack_prompt, "attack_prompt"):
         attack_prompt = attack_prompt.attack_prompt
 
     response = target_client.chat.completions.create(
