@@ -1,35 +1,58 @@
-# dspy-redteam
+# DSPy Red-Team Agent Guide
 
-## OVERVIEW
+Red-teaming language models with [DSPy](https://github.com/stanfordnlp/dspy). This repo is a Python research project that uses alternating `Attack` and `Refine` modules plus the DSPy MIPRO optimizer to generate adversarial prompts against open-weight models.
 
-Python research repo that uses the DSPy framework to red-team language models. Implements a deep language program with alternating `Attack` and `Refine` modules optimized via DSPy MIPRO.
+## Repository Layout
 
-## STRUCTURE
+- `redteam.py` — main DSPy program and optimizer loop.
+- `redcell/` — modular attack/refine cell implementations.
+- `utils.py` — shared helpers (dataset loading, judge scoring, logging).
+- `advbench_subset.json` — small harmful-behavior benchmark subset.
+- `vicuna_attack.log` — sample output log.
+- `images/` — diagrams for documentation.
+- `legacy/` — older experimental versions.
 
-```
-redteam.py          Main red-teaming program (Attack/Refine loop, DSPy compilation)
-utils.py            Shared helpers (judge/scoring utilities)
-requirements.txt    Python dependencies
-legacy/             Earlier version of the same program (kept for reference)
-images/             Diagrams for documentation
-```
-
-## COMMANDS
+## Setup Commands
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt   # Install deps
-python3 redteam.py --help                    # Show CLI options (requires deps)
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-## SETUP
+The `requirements.txt` pins DSPy and the OpenAI/LiteLLM integrations used by the judge/optimizer.
 
-- Requires Python 3.10-3.12 for the pinned `pydantic`/`jiter`/`pydantic-core` wheels (Python 3.14 needs newer wheels that may not be available for the pinned versions).
-- Copy `.env.example` to `.env` and add your `OPENAI_API_KEY` / model credentials if one exists; otherwise set `OPENAI_API_KEY` in the environment.
-- Install dependencies with the exact pins in `requirements.txt`.
+## Run Commands
 
-## CODE STYLE
+```bash
+# Run the default red-team pipeline against Vicuna-7B (or configure in redteam.py)
+python redteam.py
+```
 
-- Python with strict pinned dependencies.
-- Run `python3 -m py_compile redteam.py utils.py` to check syntax without installing heavy deps.
-- Keep the DSPy module structure in `redteam.py` aligned with the documented architecture.
+Typical flow:
+1. Load `advbench_subset.json`.
+2. Compile the attack/refine program with MIPRO.
+3. Evaluate Attack Success Rate (ASR) on the target model.
+
+## Test / Lint Commands
+
+```bash
+# Type check
+mypy redteam.py redcell/ utils.py
+# Format
+black redteam.py redcell/ utils.py
+# Style
+ruff check redteam.py redcell/ utils.py
+```
+
+## Key Conventions
+
+- Keep DSPy signatures typed; use `dspy.Predict` / `dspy.ChainOfThought` modules inside `redcell/` cells.
+- Separate the *judge* (scoring) from the *attacker* (generation) so metrics are reproducible.
+- Log every compiled prompt and the final ASR for experiment tracking.
+
+## Common Gotchas
+
+- Requires an API key or local vLLM endpoint for the judge LLM (configured via env vars, not committed).
+- Target model path is hard-coded in `redteam.py`; update it for other models.
+- MIPRO optimization can be expensive; start with a small subset before full `advbench`.
