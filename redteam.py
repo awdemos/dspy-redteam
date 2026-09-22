@@ -7,7 +7,7 @@ from dspy.evaluate import Evaluate
 from dspy.teleprompt import MIPROv2
 from openai import OpenAI
 from tqdm import tqdm
-from utils import get_response, judge_prompt, verdict_judge
+from utils import get_response, judge_prompt, judge_response
 
 load_dotenv()
 instructor_client = instructor.from_openai(OpenAI())
@@ -96,7 +96,7 @@ def metric(
         inference_params={"max_tokens": 512, "temperature": 0},
     )
     if use_verdict:
-        score = verdict_judge(intent, response)[0] / 5
+        score = judge_response(intent, response)[0] / 5
     else:
         score = judge_prompt(instructor_client, intent, response)[0]
     if eval_round:
